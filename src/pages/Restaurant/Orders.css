@@ -1,0 +1,225 @@
+/* Colors */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #34495e;
+    --accent-color: #3498db;
+    --light-gray: #ecf0f1;
+    --dark-gray: #7f8c8d;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --error-color: #e74c3c;
+  }
+  
+  /* Base Styles */
+  .orders-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--primary-color);
+  }
+  
+  .orders-header {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+    font-weight: 600;
+    border-bottom: 1px solid var(--light-gray);
+    padding-bottom: 0.5rem;
+  }
+  
+  /* Loading Styles */
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+  }
+  
+  .loading-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid var(--accent-color);
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Error Styles */
+  .error-container {
+    background-color: #fdecea;
+    padding: 1rem;
+    border-radius: 4px;
+    border-left: 4px solid var(--error-color);
+  }
+  
+  .error-message {
+    color: var(--error-color);
+    margin: 0;
+  }
+  
+  /* Restaurant Orders */
+  .restaurant-orders {
+    margin-bottom: 3rem;
+  }
+  
+  .restaurant-title {
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--light-gray);
+  }
+  
+  /* Order Card */
+  .order-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+  
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background-color: var(--light-gray);
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .order-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  .status-badge.pending {
+    background-color: var(--warning-color);
+    color: white;
+  }
+  
+  .status-badge.approved {
+    background-color: var(--success-color);
+    color: white;
+  }
+  
+  /* Order Details */
+  .order-details {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    padding: 1.5rem;
+  }
+  
+  @media (max-width: 768px) {
+    .order-details {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .customer-info, .order-items {
+    padding: 0.5rem;
+  }
+  
+  .customer-info h4, .order-items h4 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+  }
+  
+  .customer-info p {
+    margin: 0.5rem 0;
+    line-height: 1.5;
+  }
+  
+  /* Menu Items */
+  .menu-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  .menu-section h5 {
+    margin: 0 0 0.75rem 0;
+    color: var(--primary-color);
+    font-size: 1rem;
+  }
+  
+  .menu-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .menu-section li {
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed #eee;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .menu-section li:last-child {
+    border-bottom: none;
+  }
+  
+  .item-total {
+    font-weight: 600;
+    color: var(--primary-color);
+  }
+  
+  /* Order Actions */
+  .order-actions {
+    padding: 1rem 1.5rem;
+    background-color: #f9f9f9;
+    border-top: 1px solid #eee;
+    text-align: right;
+  }
+  
+  .approve-button {
+    background-color: var(--success-color);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .approve-button:hover {
+    background-color: #219653;
+  }
+  
+  .approve-button:active {
+    transform: scale(0.98);
+  }
+  
+  /* No Orders */
+  .no-orders {
+    text-align: center;
+    color: var(--dark-gray);
+    font-style: italic;
+    padding: 2rem;
+  }
