@@ -22,7 +22,7 @@ export default function Menus() {
     try {
       console.log(restaurantId);
       const response = await axios.get(
-        `http://localhost:8080/api/Restaurant/get-restaurant-menu/${restaurantId}`,
+        `https://deliveroo-api-gateway.onrender.com/gateway/Restaurant/get-restaurant-menu/${restaurantId}`,
         { headers }
       );
       console.log(restaurantId);
@@ -183,7 +183,7 @@ export default function Menus() {
     if (formValues) {
       try {
         await axios.post(
-          `http://localhost:8080/api/restaurant/menu/MenuItems/${restaurantId}/menus/${selectedMenuId}/items`,
+          `https://deliveroo-api-gateway.onrender.com/gateway/restaurant/menu/MenuItems/${restaurantId}/menus/${selectedMenuId}/items`,
           formValues,
           { headers }
         );
@@ -355,7 +355,7 @@ export default function Menus() {
     if (formValues) {
       try {
         await axios.put(
-          `http://localhost:8080/api/restaurant/menu/menuitems/${restaurantId}/menus/${selectedMenuId}/items/${item.menuItemId}`,
+          `https://deliveroo-api-gateway.onrender.com/gateway/restaurant/menu/menuitems/${restaurantId}/menus/${selectedMenuId}/items/${item.menuItemId}`,
           formValues,
           { headers }
         );
@@ -390,7 +390,7 @@ export default function Menus() {
     if (confirm.isConfirmed) {
       try {
         await axios.delete(
-          `http://localhost:8080/api/restaurant/menu/menuitems/${restaurantId}/menus/${selectedMenuId}/items/${item.menuItemId}`,
+          `https://deliveroo-api-gateway.onrender.com/gateway/restaurant/menu/menuitems/${restaurantId}/menus/${selectedMenuId}/items/${item.menuItemId}`,
           { headers }
         );
         Swal.fire("Deleted!", "Item removed successfully.", "success");
@@ -404,7 +404,7 @@ export default function Menus() {
   const handleMenuClick = async (menuId) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/restaurant/menu/MenuItems/${restaurantId}/menus/${menuId}/items`,
+        `https://deliveroo-api-gateway.onrender.com/gateway/restaurant/menu/MenuItems/${restaurantId}/menus/${menuId}/items`,
         { headers }
       );
       console.log(menuId);
@@ -553,7 +553,7 @@ export default function Menus() {
     if (result) {
       try {
         await axios.post(
-          `http://localhost:8080/api/restaurant/menus/${restaurantId}/menus`,
+          `https://deliveroo-api-gateway.onrender.com/gateway/restaurant/menus/${restaurantId}/menus`,
           result,
           { headers }
         );
@@ -685,7 +685,7 @@ export default function Menus() {
     if (result) {
       try {
         await axios.put(
-          `http://localhost:8080/api/restaurant/menus/${restaurantId}/menus/${menu.menuId}`,
+          `https://deliveroo-api-gateway.onrender.com/gateway/restaurant/menus/${restaurantId}/menus/${menu.menuId}`,
           result,
           { headers }
         );
@@ -719,7 +719,7 @@ export default function Menus() {
     if (confirm.isConfirmed) {
       try {
         await axios.delete(
-          `http://localhost:8080/api/restaurant/menus/${restaurantId}/menus/${menuId}`,
+          `https://deliveroo-api-gateway.onrender.com/gateway/restaurant/menus/${restaurantId}/menus/${menuId}`,
           { headers }
         );
         Swal.fire("Deleted!", "Menu has been removed.", "success");
