@@ -5,7 +5,7 @@ import axios from 'axios';
 
 export const sendPaymentSMS = async (to) => {
   try {
-    const response = await axios.post('http://localhost:5056/api/notifications/sms/payment', {
+    const response = await axios.post('https://deliveroo-api-gateway.onrender.com/gateway/notifications/sms/payment', {
       to: to
     });
     return response.data; // or return the whole response if you want

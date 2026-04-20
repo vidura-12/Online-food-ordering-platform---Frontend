@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Create an Axios instance
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8080',  // Your backend API base URL
+  baseURL: 'https://deliveroo-api-gateway.onrender.com/gateway',  // Your backend API base URL
   headers: {
     'Content-Type': 'application/json',
   },

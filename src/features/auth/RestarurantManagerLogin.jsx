@@ -134,12 +134,7 @@ const LoginPage = () => {
 
           <div className="text-center mt-4 text-sm text-gray-600">
             Don't have an account?{" "}
-            <a
-              href="/restaurant/restaurant-manager/register"
-              className="text-gray-800 font-medium hover:underline"
-            >
-              Sign Up
-            </a>
+            <Link to="/restaurant/restaurant-manager/register" className="text-gray-800 font-medium hover:underline">Sign Up</Link>
           </div>
         </div>
 

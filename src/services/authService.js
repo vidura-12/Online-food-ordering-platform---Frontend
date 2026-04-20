@@ -2,6 +2,6 @@
 import apiClient from './apiClient';
 
 export const login = async (loginDto) => {
-  const response = await apiClient.post('api/auth/login', loginDto);
+  const response = await apiClient.post('/auth/login', loginDto);
   return response.data;  // Assuming the backend returns { Token, Role }
 };
