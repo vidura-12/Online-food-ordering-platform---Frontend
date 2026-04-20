@@ -33,7 +33,7 @@ const Restaurant = () => {
 
       try {
         const response = await fetch(
-          "http://localhost:8080/api/Restaurant/get-all-restaurants",
+          "https://deliveroo-api-gateway.onrender.com/gateway/Restaurant/get-all-restaurants",
           {
             headers: {
               Authorization: `Bearer ${token}`,

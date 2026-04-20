@@ -57,7 +57,7 @@ const proceedToCheckout = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://localhost:8080/api/Restaurant/get-all-restaurant-menuitems",
+          "https://deliveroo-api-gateway.onrender.com/gateway/Restaurant/get-all-restaurant-menuitems",
           {
             headers: {
               Authorization: `Bearer ${token}`,
