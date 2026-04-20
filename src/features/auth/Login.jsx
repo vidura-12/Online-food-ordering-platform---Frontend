@@ -36,7 +36,11 @@ const Login = () => {
         if (response.role === "Admin") {
           navigate("/admin");
         } else {
-          navigate("/admin");
+          Swal.fire({
+            title: "Access Denied",
+            text: "You don't have admin privileges",
+            icon: "error"
+          });
         }
       });
     } catch (err) {

@@ -56,16 +56,7 @@ const AdminLayout = () => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
 
-    if (!token || role !== "Admin") {
-      MySwal.fire({
-        icon: "error",
-        title: "Access Denied",
-        text: "You must be an Admin to access this page!",
-        confirmButtonText: "Go to Login"
-      }).then(() => {
-        navigate("/login");
-      });
-    }
+   
   }, [navigate]);
 
   return (
