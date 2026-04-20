@@ -11,7 +11,7 @@ export default function Menus() {
   const [selectedMenuId, setSelectedMenuId] = useState(null);
 
   const token = localStorage.getItem("token");
-  const restaurantId = "17";
+  const restaurantId = "1";
 
   const headers = {
     Authorization: `Bearer ${token}`,
