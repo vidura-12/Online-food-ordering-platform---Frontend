@@ -40,7 +40,7 @@ const RestaurantAdd = () => {
   }, [navigate]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/Restaurant/get-restaurants/categories")
+    fetch("hhttps://deliveroo-api-gateway.onrender.com/gateway/Restaurant/get-restaurants/categories")
       .then((res) => res.json())
       .then((data) => setCategories(data))
       .catch(() => {
@@ -59,7 +59,7 @@ const RestaurantAdd = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch("http://localhost:8080/api/Restaurant/add-restaurant", {
+    fetch("https://deliveroo-api-gateway.onrender.com/gateway/Restaurant/add-restaurant", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

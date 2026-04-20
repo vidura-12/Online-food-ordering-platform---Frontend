@@ -36,7 +36,7 @@ const RegistrationFlow = () => {
     }
   
     try {
-      const response = await fetch("http://localhost:5000/gateway/auth/register", {
+      const response = await fetch("https://deliveroo-api-gateway.onrender.com/gateway/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

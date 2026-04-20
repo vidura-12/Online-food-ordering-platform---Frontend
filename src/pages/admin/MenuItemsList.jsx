@@ -23,7 +23,7 @@ export default function MenuItemsList({ restaurantId, menuId }) {
   const fetchMenuItems = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/restaurant/menu/MenuItems/${restaurantId}/menus/${menuId}/items`,
+        `https://deliveroo-api-gateway.onrender.com/gateway/restaurant/menu/MenuItems/${restaurantId}/menus/${menuId}/items`,
         { headers }
       );
       setMenuItems(response.data);
@@ -38,7 +38,7 @@ export default function MenuItemsList({ restaurantId, menuId }) {
   const handleApproveToggle = async (item) => {
     try {
       await axios.put(
-        `http://localhost:8080/api/restaurant/menu/menuitems/${restaurantId}/menus/${menuId}/items/${item.menuItemId}`,
+        `https://deliveroo-api-gateway.onrender.com/gateway/restaurant/menu/menuitems/${restaurantId}/menus/${menuId}/items/${item.menuItemId}`,
         {
           ...item,
           isApproved: !item.isApproved
@@ -66,7 +66,7 @@ export default function MenuItemsList({ restaurantId, menuId }) {
     if (confirm.isConfirmed) {
       try {
         await axios.delete(
-          `http://localhost:8080/api/restaurant/menu/menuitems/${restaurantId}/menus/${menuId}/items/${menuItemId}`,
+          `https://deliveroo-api-gateway.onrender.com/gateway/restaurant/menu/menuitems/${restaurantId}/menus/${menuId}/items/${menuItemId}`,
           { headers }
         );
         Swal.fire("Deleted!", "Menu item removed successfully.", "success");
