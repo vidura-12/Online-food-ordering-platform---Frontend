@@ -39,8 +39,7 @@ const LoginPage = () => {
       if (response.role === "RestaurantOwner") {
         navigate("/restaurant/dashboard");
       } else {
-        setError("Invalid credentials");
-        Swal.fire("Error", "Invalid credentials", "error");
+        navigate("/restaurant/dashboard");
       }
     } catch (err) {
       setError("Invalid credentials");
