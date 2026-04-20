@@ -40,7 +40,7 @@ const RestaurantAdd = () => {
   }, [navigate]);
 
   useEffect(() => {
-    fetch("hhttps://deliveroo-api-gateway.onrender.com/gateway/Restaurant/get-restaurants/categories")
+    fetch("https://deliveroo-api-gateway.onrender.com/gateway/Restaurant/get-restaurants/categories")
       .then((res) => res.json())
       .then((data) => setCategories(data))
       .catch(() => {
