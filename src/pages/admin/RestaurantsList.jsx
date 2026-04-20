@@ -21,7 +21,7 @@ export default function RestaurantsList({ onSelectRestaurant, selectedRestaurant
   const fetchRestaurants = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/Restaurant/get-all-restaurants",
+        "https://deliveroo-api-gateway.onrender.com/gateway/Restaurant/get-all-restaurants",
         { headers }
       );
       setRestaurants(response.data);
@@ -55,7 +55,7 @@ export default function RestaurantsList({ onSelectRestaurant, selectedRestaurant
       console.log("Update payload:", updatedRestaurant);
   
       const response = await axios.put(
-        `http://localhost:8080/api/Restaurant/update-restaurant/${restaurant.restaurantId}`,
+        `https://deliveroo-api-gateway.onrender.com/gateway/Restaurant/update-restaurant/${restaurant.restaurantId}`,
         updatedRestaurant,
         { headers }
       );
@@ -90,7 +90,7 @@ export default function RestaurantsList({ onSelectRestaurant, selectedRestaurant
     if (confirm.isConfirmed) {
       try {
         await axios.delete(
-          `http://localhost:8080/api/Restaurant/delete-restaurant/${restaurantId}`,
+          `https://deliveroo-api-gateway.onrender.com/gateway/Restaurant/delete-restaurant/${restaurantId}`,
           { headers }
         );
         Swal.fire("Deleted!", "Restaurant removed successfully.", "success");
