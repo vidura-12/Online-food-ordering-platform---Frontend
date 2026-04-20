@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { login } from "../../services/authService";
 import logo from "../../assets/img/logo1.png";
 import bgImage from "../../assets/img/12.png"
+import { Link } from "react-router-dom";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
