@@ -78,7 +78,7 @@ function Checkout() {
   
       console.log("Sending user details payload:", payload); // Debug log
   
-      const response = await fetch("http://localhost:5000/api/userdetails/userdetails", {
+      const response = await fetch(" https://deliveroo-api-gateway.onrender.com/gateway/userdetails/userdetails", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -128,7 +128,7 @@ function Checkout() {
       if (!token) throw new Error("Authentication token missing");
 
       // Create order
-      const orderResponse = await fetch("http://localhost:5000/api/orders", {
+      const orderResponse = await fetch(" https://deliveroo-api-gateway.onrender.com/gateway/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
