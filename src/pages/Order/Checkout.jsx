@@ -636,7 +636,7 @@ const handlePayPalSuccess = async (data) => {
                             "Content-Type": "application/json",
                           },
                           body: JSON.stringify({
-                           amount: parseFloat(amount),
+                            amount: parseFloat(finalTotal), // Use the calculated finalTotal
                             currency: "USD",
                           }),
                         });
