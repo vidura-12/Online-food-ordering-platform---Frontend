@@ -140,7 +140,7 @@ function Checkout() {
       }
     );
 
-      if (!orderResponse.ok) {
+      if (!res.ok) {
         const errorData = await orderResponse.json();
         throw new Error(errorData.message || "Failed to place order");
       }
@@ -662,38 +662,35 @@ function Checkout() {
                         style={{ layout: "vertical", height: 45 }}
                         disabled={isProcessing}
                         createOrder={async () => {
-                        try {
-                          const res = await fetch(
-                            `${GATEWAY}/gateway/payment/paypal/create`,
-                            {
-                              method: "POST",
-                              headers: { "Content-Type": "application/json" },
-                              body: JSON.stringify({
-                                amount: parseFloat(finalTotal.toFixed(2)), // or parseFloat(amount) in CheckoutPage
-                                currency: "USD",
-                              }),
-                            }
-                          );
-                        const responseText = await res.text();
-                            const data = responseText ? JSON.parse(responseText) : {};
+                      try {
+                        const res = await fetch(`${GATEWAY}/gateway/payment/paypal/create`, {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({
+                            amount: parseFloat(finalTotal.toFixed(2)),
+                            currency: "USD",
+                          }),
+                        });
 
-                            console.log("PayPal create response:", res.status, data); // debug
+                        const data = await res.json(); // ✅ directly parse JSON
 
-                            if (!res.ok) {
-                              throw new Error(data.message || data.error || `Server error: ${res.status}`);
-                            }
+                        console.log("PayPal response:", data);
 
-                            if (!data.orderId) {
-                              throw new Error(`No orderId in response: ${JSON.stringify(data)}`);
-                            }
+                        if (!res.ok) {
+                          throw new Error(data.message || "Failed to create PayPal order");
+                        }
 
-                            return data.orderId;
-                          } catch (error) {
-                            console.error("PayPal Error:", error);
-                            Swal.fire("Error", error.message, "error");
-                            throw error;
-                          }
-                        }}
+                        // 🔥 IMPORTANT: support both formats
+                        return data.orderId || data.id;
+                        
+                      } catch (error) {
+                        console.error("PayPal Error:", error);
+                        Swal.fire("Error", error.message, "error");
+                        throw error;
+                      }
+                    }}
                         onApprove={handlePayPalSuccess}
                         onError={(err) => {
                           console.error("PayPal Error:", err);
