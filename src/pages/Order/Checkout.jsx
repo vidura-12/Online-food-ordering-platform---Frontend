@@ -77,7 +77,7 @@ function Checkout() {
         restaurantName: primaryItem.restaurantName || restaurantName || "Unknown Restaurant"
       };
   
-      console.log("Sending user details payload:", payload);
+      console.log("Sending user details payload:", payload); // Debug log
   
       const response = await fetch("https://deliveroo-api-gateway.onrender.com/gateway/userdetails/userdetails", {
         method: "POST",
@@ -102,96 +102,57 @@ function Checkout() {
   };
 
   // Handle order placement
-  const handlePlaceOrder = async (paymentId = null, method = "cod") => {
-    const validationErrors = validateForm();
-    if (validationErrors.length > 0) {
-      Swal.fire("Error", validationErrors.join("<br>"), "error");
-      return;
-    }
+const handlePlaceOrder = async (paymentId = null, method = "cod") => {
+  const errors = validateForm();
+  if (errors.length) {
+    Swal.fire("Error", errors.join("<br>"), "error");
+    return;
+  }
 
+  setIsProcessing(true);
+
+  try {
+    const orderId = paymentId || `COD-${Date.now()}`;
+
+    // ✅ ONLY save user details here
+    await saveUserDetails(orderId);
+
+    navigate("/order/success", {
+      state: {
+        order: {
+          orderId,
+          total: finalTotal,
+          method,
+        },
+      },
+    });
+
+  } catch (err) {
+    Swal.fire("Error", err.message, "error");
+  } finally {
+    setIsProcessing(false);
+  }
+};
+
+const handlePayPalSuccess = async (data) => {
+  try {
     setIsProcessing(true);
 
-    try {
-      const orderData = {
-        customerName: customerDetails.name,
-        customerEmail: user.email,
-        foodItems: groupedCartItems.map(item => ({
-          name: item.menuItemName,
-          quantity: item.quantity,
-          price: item.menuItemPrice,
-        })),
-        totalPrice: finalTotal,
-        paymentMethod: method,
-        paymentId: paymentId || undefined,
-      };
-
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("Authentication token missing");
-
-      const res = await fetch(
-      "https://deliveroo-api-gateway.onrender.com/gateway/userdetails/userdetails",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: parseFloat(finalTotal.toFixed(2)),
-          currency: "USD",
-        }),
-      }
+    const res = await fetch(
+      `${GATEWAY}/gateway/payment/paypal/capture/${data.orderID}`, // ✅ FIXED
+      { method: "POST" }
     );
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || "Failed to place order");
-      }
+    if (!res.ok) throw new Error("Capture failed");
 
-      const orderResult = await res.json();
-      const orderId = orderResult.order._id;
+    await handlePlaceOrder(data.orderID, "paypal");
 
-      // Save user details
-      await saveUserDetails(orderId);
-
-      // Navigate to success page
-      navigate("/order/success", {
-        state: {
-          order: {
-            ...orderData,
-            orderId,
-          },
-        },
-      });
-    } catch (error) {
-      console.error("Order Error:", error);
-      Swal.fire("Error", error.message, "error");
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  // Handle input changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setCustomerDetails(prev => ({ ...prev, [name]: value }));
-  };
-  const handlePayPalSuccess = async (data) => {
-    try {
-      setIsProcessing(true);
-      const res = await fetch(
-        `${GATEWAY}/gateway/paypal/capture/${data.orderID}`,
-        { method: "POST" }
-      );
-      if (!res.ok) throw new Error("Payment capture failed");
-
-      const to = "+94703889971";
-      //const result = await sendPaymentSMS(to);
-
-      await handlePlaceOrder(data.orderID, "paypal");
-    } catch (error) {
-      Swal.fire("Error", error.message, "error");
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  } catch (error) {
+    Swal.fire("Error", error.message, "error");
+  } finally {
+    setIsProcessing(false);
+  }
+};
 
 
   return (

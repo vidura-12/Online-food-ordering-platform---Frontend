@@ -95,31 +95,33 @@ const CheckoutPage = () => {
                     style={{ layout: "vertical", height: 45 }}
                     disabled={isProcessing}
                     createOrder={async () => {
-                      try {
-                        const res = await fetch(
-                          `${GATEWAY}/gateway/payment/paypal/create`,
-                          {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                              amount: parseFloat(amount),
-                              currency: "USD",
-                            }),
-                          }
-                        );
+                    try {
+                      const res = await fetch(`${GATEWAY}/gateway/payment/paypal/create`, {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          amount: parseFloat(finalTotal.toFixed(2)),
+                          currency: "USD",
+                        }),
+                      });
 
-                        const data = await res.json();
-                        return data.orderId;
-                      } catch (error) {
-                        console.error("PayPal Error:", error);
-                        Swal.fire(
-                          "Error",
-                          "Failed to create PayPal order",
-                          "error"
-                        );
-                        throw error;
+                      const data = await res.json();
+
+                      if (!res.ok) {
+                        throw new Error(data.message || "Failed to create PayPal order");
                       }
-                    }}
+
+                      // ✅ IMPORTANT
+                      return data.orderId || data.id;
+
+                    } catch (error) {
+                      console.error("PayPal Error:", error);
+                      Swal.fire("Error", error.message, "error");
+                      throw error;
+                    }
+                  }}
                     onApprove={async (data) => {
                       try {
                         const res = await fetch(
