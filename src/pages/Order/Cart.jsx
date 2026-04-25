@@ -53,56 +53,41 @@ const proceedToCheckout = () => {
   };
 
   useEffect(() => {
-    const fetchMenuItems = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await axios.get(
-          "https://deliveroo-api-gateway.onrender.com/gateway/Restaurant/get-all-restaurant-menuitems",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const approvedItems = response.data.filter(
-          (item) =>
-            item.restarantsIsApproved &&
-            item.restarantsIsAvailable &&
-            item.menuIsAvailable &&
-            item.menuItemIsAvailable &&
-            item.restaurantId === restaurantId
-        );
-        setMenuItems(approvedItems);
+  const fetchMenuItems = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      
+      // We need a menuId. If your restaurant has one main menu, 
+      // you might need to pass it or fetch it first. 
+      // For now, I'll assume menuId is available or passed in location.state.
+      const menuId = location.state?.menuId || 1; 
 
-        if (approvedItems.length > 0) {
-          const {
-            restaurantName,
-            restaurantDescription,
-            address,
-            phoneNumber,
-            email,
-            openingTime,
-            closingTime,
-          } = approvedItems[0];
-          setRestaurantDetails({
-            restaurantName,
-            restaurantDescription,
-            address,
-            phoneNumber,
-            email,
-            openingTime,
-            closingTime,
-          });
+      const response = await axios.get(
+        // Updated URL to match your [HttpGet("{restaurantId}/menus/{menuId}/items")]
+        `https://deliveroo-api-gateway.onrender.com/gateway/menu-items/${restaurantId}/menus/${menuId}/items`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      } catch (error) {
-        console.error("Error fetching menu items:", error);
-      }
-    };
-
-    if (restaurantId) {
-      fetchMenuItems();
+      );
+      
+      // Note: Filter based on the DTO property names (Case Sensitive in JS)
+      const approvedItems = response.data.filter(
+        (item) => item.isApproved && item.isAvailable
+      );
+      
+      setMenuItems(approvedItems);
+      // ... rest of your logic
+    } catch (error) {
+      console.error("Error fetching menu items:", error);
     }
-  }, [restaurantId]);
+  };
+
+  if (restaurantId) {
+    fetchMenuItems();
+  }
+}, [restaurantId]);
 
   const generateDynamicCategories = (menuItems) => {
     const categories = {};
