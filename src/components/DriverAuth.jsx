@@ -27,7 +27,7 @@ function DriverAuth({ isLogin }) {
     const endpoint = isLogin ? '/api/drivers/login' : '/api/drivers/register';
 
     try {
-      const response = await fetch(`http://localhost:3000${endpoint}`, {
+      const response = await fetch(`https://deliveroo-api-gateway.onrender.com/gateway${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
