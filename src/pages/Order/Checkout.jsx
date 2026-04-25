@@ -133,7 +133,13 @@ const handlePlaceOrder = async (paymentId = null, method = "cod") => {
     setIsProcessing(false);
   }
 };
-
+const handleInputChange = (e) => {
+  const { name, value } = e.target;
+  setCustomerDetails((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+};
 const handlePayPalSuccess = async (data) => {
   try {
     setIsProcessing(true);
@@ -630,7 +636,7 @@ const handlePayPalSuccess = async (data) => {
                             "Content-Type": "application/json",
                           },
                           body: JSON.stringify({
-                            amount: parseFloat(finalTotal.toFixed(2)),
+                           amount: parseFloat(amount),
                             currency: "USD",
                           }),
                         });
