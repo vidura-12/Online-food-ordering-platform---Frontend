@@ -102,9 +102,9 @@ const CheckoutPage = () => {
                           "Content-Type": "application/json",
                         },
                         body: JSON.stringify({
-                          amount: parseFloat(finalTotal.toFixed(2)),
-                          currency: "USD",
-                        }),
+                        amount: parseFloat(amount),
+                        currency: "USD",
+                      }),
                       });
 
                       const data = await res.json();
