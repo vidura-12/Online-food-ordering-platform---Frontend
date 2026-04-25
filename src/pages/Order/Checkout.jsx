@@ -5,6 +5,7 @@ import Footer from "../../components/common/footerLanding";
 import { getLoggedInUser } from "../../services/authUtils";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import Swal from "sweetalert2";
+const GATEWAY = "https://deliveroo-api-gateway.onrender.com";
 import { sendPaymentSMS } from "../../services/sendPaymentSMS";
 function Checkout() {
   const location = useLocation();
@@ -176,7 +177,7 @@ function Checkout() {
     try {
       setIsProcessing(true);
       const res = await fetch(
-        `https://deliveroo-api-gateway.onrender.com/gateway/payment/paypal/capture/${data.orderID}`,
+        `${GATEWAY}/gateway/payment/paypal/capture/${data.orderID}`,
         { method: "POST" }
       );
       if (!res.ok) throw new Error("Payment capture failed");
