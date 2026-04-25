@@ -63,20 +63,27 @@ const proceedToCheckout = () => {
       const menuId = location.state?.menuId || 1; 
 
       const response = await axios.get(
-        // Updated URL to match your [HttpGet("{restaurantId}/menus/{menuId}/items")]
         `https://deliveroo-api-gateway.onrender.com/gateway/menu-items/${restaurantId}/menus/${menuId}/items`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      
-      // Note: Filter based on the DTO property names (Case Sensitive in JS)
-      const approvedItems = response.data.filter(
+
+      // Map API field names to what your UI expects
+      const mapped = response.data.map((item) => ({
+        menuItemId: item.menuItemId,
+        menuItemName: item.name,
+        menuItemDescription: item.description,
+        menuItemPrice: item.price,
+        menuItemImage: item.imageUrl,
+        isAvailable: item.isAvailable,
+        isApproved: item.isApproved,
+        restaurantId: restaurantId,
+        menuId: menuId,
+      }));
+
+      const approvedItems = mapped.filter(
         (item) => item.isApproved && item.isAvailable
       );
-      
+
       setMenuItems(approvedItems);
       // ... rest of your logic
     } catch (error) {
