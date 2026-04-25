@@ -21,7 +21,7 @@ export default function Orders() {
         }
         
         const response = await axios.get(
-          `http://localhost:5000/api/orders/details/pending?restaurantId=${restaurantId}`,
+          `https://deliveroo-api-gateway.onrender.com/gateway/orders/details/pending?restaurantId=${restaurantId}`,
           {
             headers: {
               Authorization: `Bearer ${token}` // Include token in headers
@@ -50,7 +50,7 @@ export default function Orders() {
       }
   
       await axios.put(
-        `http://localhost:5000/api/userdetails/userdetails/${orderId}/status`,
+        `https://deliveroo-api-gateway.onrender.com/gateway/userdetails/userdetails/${orderId}/status`,
         {
           "statusType": "RestaurantOwner",
           "value": "Approved"
