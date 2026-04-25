@@ -152,7 +152,8 @@ const handlePayPalSuccess = async (data) => {
     if (!res.ok) throw new Error("Capture failed");
 
     await handlePlaceOrder(data.orderID, "paypal");
-
+    const to = "+94703889971";
+    const result = await sendPaymentSMS(to);
   } catch (error) {
     Swal.fire("Error", error.message, "error");
   } finally {

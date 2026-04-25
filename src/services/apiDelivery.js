@@ -16,7 +16,6 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
     if (token) {
-      // Ensure there are no spaces or extra characters
       config.headers.Authorization = `Bearer ${token.trim()}`;
     }
     return config;
@@ -28,9 +27,9 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-      console.warn("Authentication error. Clearing token...");
-      // localStorage.removeItem("token"); // Uncomment to auto-logout on auth failure
+    // Log the exact URL that failed to help you debug 404s
+    if (error.response?.status === 404) {
+      console.error(`404 Error: The gateway could not find ${error.config.url}. Check Ocelot Upstream path.`);
     }
     return Promise.reject(error);
   }
@@ -42,24 +41,21 @@ api.interceptors.response.use(
  */
 export const authService = {
   login: async (credentials) => {
+    // Sends to: /gateway/drivers/login
     const response = await api.post("/drivers/login", credentials);
     if (response.data.token) {
       localStorage.setItem("token", response.data.token);
-      // If your backend returns driver info, store ID too
-      if (response.data.driverId) {
-        localStorage.setItem("driverId", response.data.driverId);
-      }
     }
     return response.data;
   },
 
   register: async (userData) => {
+    // Sends to: /gateway/drivers/register
     const response = await api.post("/drivers/register", userData);
     return response.data;
   },
 
   getLoggedUser: async () => {
-    // Note: Ensure your Ocelot has a route for /gateway/drivers/me
     const response = await api.get("/drivers/me");
     return response.data;
   },
