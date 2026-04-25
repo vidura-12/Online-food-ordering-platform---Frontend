@@ -381,7 +381,7 @@ const proceedToCheckout = () => {
                           Delivery fee
                         </span>
                         <span className="text-sm font-medium text-gray-900">
-                          $2.99
+                          $0.09
                         </span>
                       </div>
                       <div className="flex justify-between pt-3 border-t border-gray-200">
@@ -389,7 +389,7 @@ const proceedToCheckout = () => {
                           Total
                         </span>
                         <span className="text-base font-medium text-gray-900">
-                          ${(calculateTotal() + 2.99).toFixed(2)}
+                          ${(calculateTotal() + 0.09).toFixed(2)}
                         </span>
                       </div>
                     </div>
