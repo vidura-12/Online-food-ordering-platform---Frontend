@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { authService } from '../services/apiService';
+import { authService } from '../../services/apiDelivery';
 
 function DriverAuth({ isLogin }) {
   const navigate = useNavigate();
