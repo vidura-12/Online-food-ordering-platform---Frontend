@@ -141,11 +141,11 @@ function Checkout() {
     );
 
       if (!res.ok) {
-        const errorData = await orderResponse.json();
+        const errorData = await res.json();
         throw new Error(errorData.message || "Failed to place order");
       }
 
-      const orderResult = await orderResponse.json();
+      const orderResult = await res.json();
       const orderId = orderResult.order._id;
 
       // Save user details
@@ -177,7 +177,7 @@ function Checkout() {
     try {
       setIsProcessing(true);
       const res = await fetch(
-        `${GATEWAY}/gateway/payment/paypal/capture/${data.orderID}`,
+        `${GATEWAY}/gateway/paypal/capture/${data.orderID}`,
         { method: "POST" }
       );
       if (!res.ok) throw new Error("Payment capture failed");
