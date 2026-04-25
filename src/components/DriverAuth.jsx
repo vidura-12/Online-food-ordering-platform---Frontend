@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { authService } from '../services/apiService';
 
 function DriverAuth({ isLogin }) {
   const navigate = useNavigate();
@@ -22,31 +23,26 @@ function DriverAuth({ isLogin }) {
 
   const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const endpoint = isLogin ? '/api/drivers/login' : '/api/drivers/register';
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError('');
 
-    try {
-      const response = await fetch(`https://deliveroo-api-gateway.onrender.com/gateway${endpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error);
-
-      if (isLogin) {
-        localStorage.setItem('driverToken', data.token);
-        localStorage.setItem('driverInfo', JSON.stringify(data.driver));
-        navigate('/driverDashboard');
-      } else {
-        setError('Registration successful! Please login.');
-      }
-    } catch (err) {
-      setError(err.message);
+  try {
+    let data;
+    if (isLogin) {
+      data = await authService.login({ email: formData.email, password: formData.password });
+      localStorage.setItem('driverToken', data.token);
+      localStorage.setItem('driverInfo', JSON.stringify(data.driver));
+      navigate('/driverDashboard');
+    } else {
+      data = await authService.register(formData);
+      setError('Registration successful! Please login.');
     }
-  };
+  } catch (err) {
+    // Axios errors hold response data in err.response.data
+    setError(err.response?.data?.error || "An error occurred");
+  }
+};
 
   const handleCityChange = (index, value) => {
     const updatedCities = [...formData.deliveryCities];
