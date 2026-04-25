@@ -3,6 +3,8 @@ import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import Swal from "sweetalert2";
 import "./CheckoutPage.css";
 
+const GATEWAY = "https://deliveroo-api-gateway.onrender.com";
+
 const CheckoutPage = () => {
   const [amount, setAmount] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -14,9 +16,9 @@ const CheckoutPage = () => {
     }
 
     setIsProcessing(true);
-    
+
     try {
-      const response = await fetch("http://localhost:5212/api/payment/cod", {
+      const response = await fetch(`${GATEWAY}/gateway/payment/cod`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -25,13 +27,15 @@ const CheckoutPage = () => {
         }),
       });
 
-      const data = await response.json();
+      const responseText = await response.text();
+      const data = responseText ? JSON.parse(responseText) : {};
+
       if (response.ok) {
         Swal.fire({
           title: "Success",
           html: `Cash on Delivery Payment Success!`,
           icon: "success",
-          confirmButtonColor: "#10b981"
+          confirmButtonColor: "#10b981",
         });
       } else {
         Swal.fire("Error", data.error || "COD Payment Failed", "error");
@@ -52,7 +56,7 @@ const CheckoutPage = () => {
         <div className="card-header">
           <h3>Enter Payment Details</h3>
         </div>
-        
+
         <div className="card-body">
           <div className="form-group">
             <label htmlFor="totalAmount">Amount (USD)</label>
@@ -70,8 +74,8 @@ const CheckoutPage = () => {
           </div>
 
           <div className="payment-actions">
-            <button 
-              className="cod-button" 
+            <button
+              className="cod-button"
               onClick={handleCodPayment}
               disabled={isProcessing}
             >
@@ -82,7 +86,8 @@ const CheckoutPage = () => {
               <div className="paypal-container">
                 <PayPalScriptProvider
                   options={{
-                    clientId: "Aacd_SPuODUux_H7x6evbTSojfds_jToSXaUD4SegYNJE5CM91OWuqbb1-qwkvnEdpMC_YW8zxZGxMdt",
+                    clientId:
+                      "Aacd_SPuODUux_H7x6evbTSojfds_jToSXaUD4SegYNJE5CM91OWuqbb1-qwkvnEdpMC_YW8zxZGxMdt",
                     currency: "USD",
                   }}
                 >
@@ -91,27 +96,34 @@ const CheckoutPage = () => {
                     disabled={isProcessing}
                     createOrder={async () => {
                       try {
-                        const res = await fetch("http://localhost:5212/api/paypal/create", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({
-                            amount: parseFloat(amount),
-                            currency: "USD",
-                          }),
-                        });
+                        const res = await fetch(
+                          `${GATEWAY}/gateway/payment/paypal/create`,
+                          {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              amount: parseFloat(amount),
+                              currency: "USD",
+                            }),
+                          }
+                        );
 
                         const data = await res.json();
                         return data.orderId;
                       } catch (error) {
                         console.error("PayPal Error:", error);
-                        Swal.fire("Error", "Failed to create PayPal order", "error");
+                        Swal.fire(
+                          "Error",
+                          "Failed to create PayPal order",
+                          "error"
+                        );
                         throw error;
                       }
                     }}
                     onApprove={async (data) => {
                       try {
                         const res = await fetch(
-                          `http://localhost:5212/api/paypal/capture/${data.orderID}`,
+                          `${GATEWAY}/gateway/payment/paypal/capture/${data.orderID}`,
                           { method: "POST" }
                         );
                         const result = await res.json();
@@ -119,16 +131,24 @@ const CheckoutPage = () => {
                           title: "Success",
                           text: result.message || "Payment completed.",
                           icon: "success",
-                          confirmButtonColor: "#10b981"
+                          confirmButtonColor: "#10b981",
                         });
                       } catch (error) {
                         console.error("Capture Error:", error);
-                        Swal.fire("Error", "Failed to capture payment", "error");
+                        Swal.fire(
+                          "Error",
+                          "Failed to capture payment",
+                          "error"
+                        );
                       }
                     }}
                     onError={(err) => {
                       console.error("PayPal Error:", err);
-                      Swal.fire("Error", "Something went wrong with PayPal payment", "error");
+                      Swal.fire(
+                        "Error",
+                        "Something went wrong with PayPal payment",
+                        "error"
+                      );
                     }}
                   />
                 </PayPalScriptProvider>

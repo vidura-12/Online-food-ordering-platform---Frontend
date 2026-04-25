@@ -663,16 +663,16 @@ function Checkout() {
                         createOrder={async () => {
                           try {
                             const res = await fetch(
-                              "http://localhost:5212/api/paypal/create",
-                              {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({
-                                  amount: parseFloat(finalTotal.toFixed(2)),
-                                  currency: "USD",
-                                }),
-                              }
-                            );
+                            "https://deliveroo-api-gateway.onrender.com/gateway/payment/paypal/create",
+                            {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({
+                                amount: parseFloat(finalTotal.toFixed(2)),
+                                currency: "USD",
+                              }),
+                            }
+                          );
 
                             const data = await res.json();
                             return data.orderId;

@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import './Orders.css'; // We'll create this CSS file
+import { useState, useEffect } from "react";
+import axios from "axios";
+import "./Orders.css";
+
+const GATEWAY = "https://deliveroo-api-gateway.onrender.com";
 
 export default function Orders() {
   const [orders, setOrders] = useState({});
@@ -11,24 +13,18 @@ export default function Orders() {
     const fetchOrders = async () => {
       try {
         const restaurantId = localStorage.getItem("restaurantId");
-        const token = localStorage.getItem("token"); // Get token from localStorage
-        
-        if (!restaurantId) {
-          throw new Error("Restaurant ID not found in local storage");
-        }
-        if (!token) {
-          throw new Error("Authentication token not found");
-        }
-        
+        const token = localStorage.getItem("token");
+
+        if (!restaurantId) throw new Error("Restaurant ID not found in local storage");
+        if (!token) throw new Error("Authentication token not found");
+
         const response = await axios.get(
-          `https://deliveroo-api-gateway.onrender.com/gateway/orders/details/pending?restaurantId=${restaurantId}`,
+          `${GATEWAY}/gateway/orders/details/pending?restaurantId=${restaurantId}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}` // Include token in headers
-            }
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
-        
+
         setOrders(response.data.groupedByRestaurant || {});
       } catch (err) {
         setError(err.message);
@@ -36,37 +32,25 @@ export default function Orders() {
         setLoading(false);
       }
     };
-  
+
     fetchOrders();
   }, []);
-  
+
   const handleApproveOrder = async (orderId) => {
     try {
-      const token = localStorage.getItem("token"); // Get token from localStorage
-      console.log(orderId);
-      console.log(token)
-      if (!token) {
-        throw new Error("Authentication token not found");
-      }
-  
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Authentication token not found");
+
       await axios.put(
-        `https://deliveroo-api-gateway.onrender.com/gateway/userdetails/userdetails/${orderId}/status`,
-        {
-          "statusType": "RestaurantOwner",
-          "value": "Approved"
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}` // Include token in headers
-          }
-        }
+        `${GATEWAY}/gateway/userdetails/userdetails/${orderId}/status`,
+        { statusType: "RestaurantOwner", value: "Approved" },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-  
-      // Update the local state to remove the approved order
+
       const updatedOrders = { ...orders };
       for (const restaurantId in updatedOrders) {
         updatedOrders[restaurantId] = updatedOrders[restaurantId].filter(
-          order => order._id !== orderId
+          (order) => order._id !== orderId
         );
       }
       setOrders(updatedOrders);
@@ -95,15 +79,13 @@ export default function Orders() {
   return (
     <div className="orders-container">
       <h1 className="orders-header">Pending Orders</h1>
-      
+
       {Object.keys(orders).length === 0 ? (
         <p className="no-orders">No pending orders found</p>
       ) : (
         Object.entries(orders).map(([restaurantId, restaurantOrders]) => (
           <div key={restaurantId} className="restaurant-orders">
-            
-            
-            {restaurantOrders.map(order => (
+            {restaurantOrders.map((order) => (
               <div key={order._id} className="order-card">
                 <div className="order-header">
                   <h3>Order #{order._id.slice(-6).toUpperCase()}</h3>
@@ -111,26 +93,32 @@ export default function Orders() {
                     {order.status}
                   </span>
                 </div>
-                
+
                 <div className="order-details">
                   <div className="customer-info">
                     <h4>Customer Information</h4>
                     <p><strong>Name:</strong> {order.customerName}</p>
                     <p><strong>Phone:</strong> {order.phoneNumber}</p>
-                    <p><strong>Address:</strong> {order.address}, {order.city}, {order.zipCode}</p>
+                    <p>
+                      <strong>Address:</strong> {order.address}, {order.city},{" "}
+                      {order.zipCode}
+                    </p>
                     <p><strong>Payment Method:</strong> {order.paymentMethod}</p>
-                    <p><strong>Total Amount:</strong> ${order.totalAmount.toFixed(2)}</p>
+                    <p>
+                      <strong>Total Amount:</strong> ${order.totalAmount.toFixed(2)}
+                    </p>
                   </div>
-                  
+
                   <div className="order-items">
                     <h4>Order Items</h4>
-                    {order.menus.map(menu => (
+                    {order.menus.map((menu) => (
                       <div key={menu.menuId} className="menu-section">
                         <h5>{menu.menuName}</h5>
                         <ul>
-                          {menu.items.map(item => (
+                          {menu.items.map((item) => (
                             <li key={item.menuItemId}>
-                              {item.menuItemName} - {item.qty} x ${item.price.toFixed(2)}
+                              {item.menuItemName} - {item.qty} x $
+                              {item.price.toFixed(2)}
                               <span className="item-total">
                                 ${(item.qty * item.price).toFixed(2)}
                               </span>
@@ -141,9 +129,9 @@ export default function Orders() {
                     ))}
                   </div>
                 </div>
-                
+
                 <div className="order-actions">
-                  <button 
+                  <button
                     onClick={() => handleApproveOrder(order._id)}
                     className="approve-button"
                   >
