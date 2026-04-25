@@ -77,7 +77,7 @@ function Checkout() {
         restaurantName: primaryItem.restaurantName || restaurantName || "Unknown Restaurant"
       };
   
-      console.log("Sending user details payload:", payload); // Debug log
+      console.log("Sending user details payload:", payload);
   
       const response = await fetch("https://deliveroo-api-gateway.onrender.com/gateway/userdetails/userdetails", {
         method: "POST",
@@ -129,7 +129,7 @@ function Checkout() {
       if (!token) throw new Error("Authentication token missing");
 
       const res = await fetch(
-      "https://deliveroo-api-gateway.onrender.com/gateway/payment/paypal/create",
+      "https://deliveroo-api-gateway.onrender.com/gateway/userdetails/userdetails",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
