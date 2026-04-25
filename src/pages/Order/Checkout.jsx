@@ -661,28 +661,35 @@ function Checkout() {
                         style={{ layout: "vertical", height: 45 }}
                         disabled={isProcessing}
                         createOrder={async () => {
-                          try {
-                            const res = await fetch(
-                            "https://deliveroo-api-gateway.onrender.com/gateway/payment/paypal/create",
+                        try {
+                          const res = await fetch(
+                            `${GATEWAY}/gateway/payment/paypal/create`,
                             {
                               method: "POST",
                               headers: { "Content-Type": "application/json" },
                               body: JSON.stringify({
-                                amount: parseFloat(finalTotal.toFixed(2)),
+                                amount: parseFloat(finalTotal.toFixed(2)), // or parseFloat(amount) in CheckoutPage
                                 currency: "USD",
                               }),
                             }
                           );
+                        const responseText = await res.text();
+                            const data = responseText ? JSON.parse(responseText) : {};
 
-                            const data = await res.json();
+                            console.log("PayPal create response:", res.status, data); // debug
+
+                            if (!res.ok) {
+                              throw new Error(data.message || data.error || `Server error: ${res.status}`);
+                            }
+
+                            if (!data.orderId) {
+                              throw new Error(`No orderId in response: ${JSON.stringify(data)}`);
+                            }
+
                             return data.orderId;
                           } catch (error) {
                             console.error("PayPal Error:", error);
-                            Swal.fire(
-                              "Error",
-                              "Failed to create PayPal order",
-                              "error"
-                            );
+                            Swal.fire("Error", error.message, "error");
                             throw error;
                           }
                         }}
