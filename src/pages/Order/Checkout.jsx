@@ -127,15 +127,17 @@ function Checkout() {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("Authentication token missing");
 
-      // Create order
-      const orderResponse = await fetch("https://deliveroo-api-gateway.onrender.com/gateway/orders", {
+      const res = await fetch(
+      "https://deliveroo-api-gateway.onrender.com/gateway/payment/paypal/create",
+      {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(orderData),
-      });
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: parseFloat(finalTotal.toFixed(2)),
+          currency: "USD",
+        }),
+      }
+    );
 
       if (!orderResponse.ok) {
         const errorData = await orderResponse.json();
@@ -174,7 +176,7 @@ function Checkout() {
     try {
       setIsProcessing(true);
       const res = await fetch(
-        `http://localhost:5212/api/paypal/capture/${data.orderID}`,
+        `https://deliveroo-api-gateway.onrender.com/gateway/payment/paypal/capture/${data.orderID}`,
         { method: "POST" }
       );
       if (!res.ok) throw new Error("Payment capture failed");
