@@ -42,7 +42,7 @@ export default function Orders() {
       if (!token) throw new Error("Authentication token not found");
 
       await axios.put(
-        `${GATEWAY}/gateway/userdetails/userdetails/${orderId}/status`,
+        `${GATEWAY}/gateway/userdetails/${orderId}/status`,
         { statusType: "RestaurantOwner", value: "Approved" },
         { headers: { Authorization: `Bearer ${token}` } }
       );
