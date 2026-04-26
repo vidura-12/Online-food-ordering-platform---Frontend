@@ -42,7 +42,7 @@ export default function Profile() {
       });
 
       // Fetch order history for the user
-      axios.get(`https://deliveroo-api-gateway.onrender.com/gateway/userdetails/userdetails/${userId}`, {
+      axios.get(`https://deliveroo-api-gateway.onrender.com/gateway/userdetails/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
