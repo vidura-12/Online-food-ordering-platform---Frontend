@@ -12,7 +12,7 @@ function OrderSuccess() {
   const order =
     location.state?.order || JSON.parse(localStorage.getItem("currentOrder"));
   const [showPDFPreview, setShowPDFPreview] = useState(false);
-
+  
   useEffect(() => {
     if (!order) {
       Swal.fire("Error", "No order details found", "error").then(() =>
