@@ -118,14 +118,23 @@ const handlePlaceOrder = async (paymentId = null, method = "cod") => {
     await saveUserDetails(orderId);
 
     navigate("/order/success", {
-      state: {
-        order: {
-          orderId,
-          total: finalTotal,
-          method,
-        },
+    state: {
+      order: {
+        orderId,
+        totalPrice: finalTotal,
+        subtotal: totalPrice,
+        deliveryFee,
+        tax,
+        foodItems: groupedCartItems.map(item => ({
+          name: item.menuItemName,
+          quantity: item.quantity,
+          price: item.menuItemPrice
+        })),
+        customerName: customerDetails.name,
+        customerEmail: user?.email || "N/A"
       },
-    });
+    },
+  });
 
   } catch (err) {
     Swal.fire("Error", err.message, "error");
