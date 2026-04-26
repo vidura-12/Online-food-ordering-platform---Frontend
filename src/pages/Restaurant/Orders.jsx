@@ -132,7 +132,7 @@ export default function Orders() {
 
                 <div className="order-actions">
                   <button
-                    onClick={() => handleApproveOrder(order._id)}
+                    onClick={() => handleApproveOrder(order.orderId)}
                     className="approve-button"
                   >
                     Approve Order
