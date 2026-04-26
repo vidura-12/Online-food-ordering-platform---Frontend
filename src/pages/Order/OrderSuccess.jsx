@@ -79,7 +79,7 @@ function OrderSuccess() {
                 Order Items
               </h3>
               <div className="space-y-4">
-                {order.foodItems.map((item, index) => (
+                {order.foodItems?.map((item, index) => (
                   <div
                     key={index}
                     className="flex justify-between items-center border-b border-gray-100 pb-3"
