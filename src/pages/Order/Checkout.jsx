@@ -144,24 +144,43 @@ const handlePayPalSuccess = async (data) => {
   try {
     setIsProcessing(true);
 
+    // 1️⃣ Capture PayPal payment
     const res = await fetch(
-      `${GATEWAY}/gateway/payment/paypal/capture/${data.orderID}`, // ✅ FIXED
+      `${GATEWAY}/gateway/payment/paypal/capture/${data.orderID}`,
       { method: "POST" }
     );
 
     if (!res.ok) throw new Error("Capture failed");
 
+    // 2️⃣ Place order
     await handlePlaceOrder(data.orderID, "paypal");
-    const to = "+94703889971";
-    const result = await sendPaymentSMS(to);
+
+    // 3️⃣ Send SMS
+    //const to = "+94703889971";
+    //await sendPaymentSMS(to);
+
+    // 4️⃣ ✅ Send Email Notification (NEW)
+    const emailRes = await fetch(
+      `${GATEWAY}/gateway/email/order-placed`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          customerEmail: "utharasonadi@gmail.com", // hardcoded as you requested
+        }),
+      }
+    );
+
+    if (!emailRes.ok) throw new Error("Email notification failed");
+
   } catch (error) {
     Swal.fire("Error", error.message, "error");
   } finally {
     setIsProcessing(false);
   }
 };
-
-
   return (
     <div className="font-sans min-h-screen bg-gray-50">
       <NavBar />
